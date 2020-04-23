@@ -9,9 +9,6 @@
     border-radius: 10px;
 }
 
-.Input {
-    display: block;
-}
 
 @media (min-width: 600px) {
     .ContactData {
