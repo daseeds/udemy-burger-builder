@@ -97,7 +97,6 @@ class ContactData extends Component {
             street: "",
             postalCode: "",
         },
-        loading: false,
         formIsValid: false,
     };
 
@@ -194,7 +193,7 @@ class ContactData extends Component {
                 </Button>
             </form>
         );
-        if (this.state.loading) {
+        if (this.props.loading) {
             form = <Spinner />;
         }
         return (
@@ -208,14 +207,15 @@ class ContactData extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        ingredients: state.ingredients,
-        price: state.totalPrice,
+        ingredients: state.burgerBuilder.ingredients,
+        price: state.burgerBuilder.totalPrice,
+        loading: state.order.loading
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onOrderBurger: (orderData) => dispatch(actions.orderBurgerStart(orderData)),
+        onOrderBurger: (orderData) => dispatch(actions.orderBurger(orderData)),
     };
 };
 
