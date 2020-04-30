@@ -1,4 +1,5 @@
 import * as actionTypes from "../actions/actionsTypes";
+import { updateObject } from "../utility";
 
 const initialState = {
     ingredients: null,
@@ -13,37 +14,46 @@ const INGREDIENT_PRICES = {
     bacon: 0.7,
 };
 
+const addIngredient = (state, action) => {
+    const updatedIngredient = {
+        [action.ingredientName]: state.ingredients[action.ingredientName] + 1,
+    };
+    const updatedIngredients = updateObject(
+        state.ingredients,
+        updatedIngredient
+    );
+    const updatedState = {
+        ingredients: updatedIngredients,
+        totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName],
+    };
+    return updatedState;
+};
+
+const removeIngredient = (state, action) => {
+    return {
+        ...state,
+        ingredients: {
+            ...state.ingredients,
+            [action.ingredientName]:
+                state.ingredients[action.ingredientName] - 1,
+        },
+        totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName],
+    };
+};
+
 const reducer = (state = initialState, action) => {
     console.log(action, state);
     switch (action.type) {
         case actionTypes.INGREDIENT_ADD:
-            return {
-                ...state,
-                ingredients: {
-                    ...state.ingredients,
-                    [action.ingredientName]:
-                        state.ingredients[action.ingredientName] + 1,
-                },
-                totalPrice:
-                    state.totalPrice + INGREDIENT_PRICES[action.ingredientName],
-            };
+            return addIngredient(state, action);
         case actionTypes.INGREDIENT_DELETE:
-            return {
-                ...state,
-                ingredients: {
-                    ...state.ingredients,
-                    [action.ingredientName]:
-                        state.ingredients[action.ingredientName] - 1,
-                },
-                totalPrice:
-                    state.totalPrice - INGREDIENT_PRICES[action.ingredientName],
-            };
+            return removeIngredient(state, action);
         case actionTypes.INGREDIENTS_SET:
             return {
                 ...state,
                 ingredients: action.ingredients,
                 error: false,
-                totalPrice: 4
+                totalPrice: 4,
             };
         case actionTypes.INGREDIENTS_FETCH_FAILED:
             return {
