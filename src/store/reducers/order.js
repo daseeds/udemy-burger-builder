@@ -8,7 +8,6 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-    console.log(action, state);
     switch (action.type) {
         case actionTypes.ORDER_INIT:
             return updateObject(state, { purchased: false });
